@@ -50,11 +50,11 @@ void buzz(void)
 unsigned char i;//
 unsigned short dur;
 
-	leds(0xF4);
+	//leds(0xF4);
 
     for(dur = 0; dur < 500; dur++)
     {
-        write_max(ENA,0x24);
+        write_max(ENA,0x3C);
         for(i=0; i < 2; i++)continue;
         write_max(ENA,0x20);
         for(i=0; i < 2; i++)continue;

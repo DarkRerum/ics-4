@@ -67,7 +67,7 @@ CABS                                00000000    00000000 =           0. bytes (A
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
 C:   00000100  l_IRAM                          
-C:   00000967  l_CSEG                          
+C:   000009D2  l_CSEG                          
 C:   00002100  s_HOME                          
 C:   00002108  s_GSINIT0                       
 C:   0000210B  s_GSINIT1                       
@@ -78,8 +78,8 @@ C:   00002161  s_GSINIT
 C:   00002161  s_GSINIT5                       
 C:   0000219C  s_GSFINAL                       
 C:   0000219F  s_CSEG                          
-C:   00002B06  s_CONST                         
-C:   00002B09  s_XINIT                         
+C:   00002B71  s_CONST                         
+C:   00002B74  s_XINIT                         
 C:   00006000  s_PSEG                          
 C:   00006000  s_XISEG                         
 C:   00006000  s_XSEG                          
@@ -394,7 +394,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CSEG                                0000219F    00000967 =        2407. bytes (REL,CON,CODE)
+CSEG                                0000219F    000009D2 =        2514. bytes (REL,CON,CODE)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -411,29 +411,31 @@ C:   00002374  _rsio                              int_sio
 C:   000023BB  _type                              int_sio
 C:   000025F6  _convert_number                    test_sio
 C:   000026A3  _key_callback                      test_sio
-C:   000026CE  _convert_16_10                     test_sio
-C:   000026D4  _main                              test_sio
-C:   000026FB  _getDips                           dip
-C:   00002701  _initFifo                          fifo
-C:   0000271A  _pullElement                       fifo
-C:   00002813  _pushElement                       fifo
-C:   0000286F  _isEmpty                           fifo
-C:   00002885  _ScanKBOnce                        kb
-C:   00002976  _buzz                              buzz
-C:   000029CD  __gptrput                          _gptrput
-C:   000029E6  _isupper                           _isupper
-C:   000029FA  _memset                            _memset
-C:   00002A64  __gptrget                          _gptrget
-C:   00002A80  __modsint                          _modsint
-C:   00002ABD  __moduint                          _moduint
-C:   00002AC7  __modint                           _moduint
-C:   00002B02  __sdcc_external_startup            _startup
+C:   00002709  _convert_16_10                     test_sio
+C:   0000270A  _main                              test_sio
+C:   00002731  _getDips                           dip
+C:   00002737  _initFifo                          fifo
+C:   00002750  _pullElement                       fifo
+C:   00002849  _pushElement                       fifo
+C:   000028A5  _isEmpty                           fifo
+C:   000028BB  _ScanKBOnce                        kb
+C:   000029DF  _initKB                            kb
+C:   000029E7  _buzz                              buzz
+C:   00002A38  __gptrput                          _gptrput
+C:   00002A51  _isupper                           _isupper
+C:   00002A65  _memset                            _memset
+C:   00002ACF  __gptrget                          _gptrget
+C:   00002AEB  __modsint                          _modsint
+C:   00002B28  __moduint                          _moduint
+C:   00002B32  __modint                           _moduint
+C:   00002B6D  __sdcc_external_startup            _startup
+
 ASxxxx Linker V03.00 + NoICE + sdld,  page 19.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CONST                               00002B06    00000003 =           3. bytes (REL,CON,CODE)
+CONST                               00002B71    00000003 =           3. bytes (REL,CON,CODE)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------

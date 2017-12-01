@@ -32,6 +32,8 @@ N Дата     Версия   Автор               Описание
 1 10.04.02  1.0.0   LAN     Создан
 ******************************************************************************/
 #include "max.h"
+#include "buzz.h"
+#include "int_sio.h"
 
 /*----------------------------------------------------------------------------
             Переменные и флаги
@@ -63,6 +65,7 @@ char ScanKBOnce(char *ch)
 {
 unsigned char row,col,rownum,colnum;
 unsigned int i;
+unsigned char kc = 0; //key pressed count
 
     //Сканирование производится по "столбцам" клавиатуры, на которые подается
     //"бегущий 0".
@@ -79,14 +82,16 @@ unsigned int i;
             row = read_max(KB) & (0x10 << rownum);
             if( !row ) //Обнаружено нажатие клавиши:
             {       
-                for(i = 0; i<10000; i++)continue;//проверка на дребезг контакта:
+                for(i = 0; i<10000/2; i++)continue;//проверка на дребезг контакта:
                        //через примерно 40мс повтор сканирования той же клавиши
 
                 row = read_max(KB) & (0x10 << rownum);
                 if( !row )
                 {
+					buzz();					
                     *ch = (KBTable[(colnum<<2) + rownum]);
-                    return 1; //Стабильное нажатие клавиши
+					kc++;
+					ch++;
                 }
 
             }
@@ -94,7 +99,10 @@ unsigned int i;
 
     }
 
-    return 0; //Ни одна клавиша не нажата
+    return kc; //Ни одна клавиша не нажата
 }
 
+void initKB(unsigned int first_repeat_delay, unsigned int repeat_speed) {
+	
+}
 

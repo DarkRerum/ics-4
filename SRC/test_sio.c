@@ -147,12 +147,22 @@ void convert_number() {
 
 void key_callback() {
 	unsigned short i;
-	unsigned char ch;
+	unsigned char ch[10];
 	
-	if( ScanKBOnce(&ch) )
+	char keys_pressed = ScanKBOnce(ch);
+	if (keys_pressed > 2) {
+		return;
+	}
+	for (i = 0; i < keys_pressed; i++) {
+		wsio(ch[i]);
+	}
+	
+	/*if( ScanKBOnce(ch) )
         {
-            wsio(ch);
-			buzz();
+			
+            wsio(ch[0]);
+			wsio(ch[1]);
+			//buzz();
             //LCD_Putch(ch);
         }
 		 /*else
@@ -161,7 +171,7 @@ void key_callback() {
 }
 
 void convert_16_10() {
-	leds(0x11);
+	//leds(0x11);
 }
 
 void main( void )

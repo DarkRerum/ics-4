@@ -3,3 +3,5 @@
 *.rst
 *.asm
 *.lst
+*.bin
+*.hex

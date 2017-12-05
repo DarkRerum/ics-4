@@ -16,11 +16,12 @@
 -l libfloat
 SRC/led.rel
 SRC/max.rel
-SRC/int_sio.rel
-SRC/test_sio.rel
+SRC/main.rel
 SRC/dip.rel
+SRC/util.rel
 SRC/fifo.rel
+SRC/speaker.rel
 SRC/kb.rel
-SRC/buzz.rel
+SRC/int_sio.rel
 
 -e

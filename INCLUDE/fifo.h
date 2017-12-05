@@ -1,7 +1,7 @@
 #ifndef __FIFO__H
 #define __FIFO__H
 
-#define FIFO_MAX_SIZE 30
+#define FIFO_MAX_SIZE 20
 
 typedef struct fifo_t {
     unsigned char size;

@@ -63,13 +63,13 @@ term:
 LAB_SRC = \
 $(SRC_DIR)/led.c \
 $(SRC_DIR)/max.c \
-$(SRC_DIR)/int_sio.c \
-$(SRC_DIR)/test_sio.c \
+$(SRC_DIR)/main.c \
 $(SRC_DIR)/dip.c \
+$(SRC_DIR)/util.c \
 $(SRC_DIR)/fifo.c \
+$(SRC_DIR)/speaker.c \
 $(SRC_DIR)/kb.c \
-$(SRC_DIR)/buzz.c
-
+$(SRC_DIR)/int_sio.c
 
 LAB_OBJ = $(LAB_SRC:.c=.rel)
 

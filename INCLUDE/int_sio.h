@@ -7,7 +7,6 @@
 #define S2400   0xF4
 #define S1200   0xE8
 
-
 unsigned char rsiostat(void);
 void wsio( unsigned char c );
 unsigned char rsio(void);

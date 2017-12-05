@@ -1,41 +1,13 @@
-/****************************************************************************
-
-    sio.c - простейший драйвер последовательного канала
-            для учебного стенда SDK-1.1
-
-    (C) sio.c, Ключев А.О.  2007 г.
-
-Это свободная программа; вы можете повторно распространять ее и/или
-модифицировать ее в соответствии с Универсальной Общественной
-Лицензией GNU, опубликованной Фондом Свободного ПО; либо версии 2,
-либо (по вашему выбору) любой более поздней версии.
-
-Эта программа распространяется в надежде, что она будет полезной,
-но БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ; даже без подразумеваемых гарантий
-КОММЕРЧЕСКОЙ ЦЕННОСТИ или ПРИГОДНОСТИ ДЛЯ КОНКРЕТНОЙ ЦЕЛИ.  Для
-получения подробных сведений смотрите Универсальную Общественную
-Лицензию GNU.
-
-Вы должны были получить копию Универсальной Общественной Лицензии
-GNU вместе с этой программой; если нет, напишите по адресу: Free
-Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-02111-1307 USA
-
-----------------------------------------------------------------------------
-Россия, Санкт-Петербург, кафедра вычислительной техники СПбГУИТМО 
-e-mail: kluchev@d1.ifmo.ru
-
-****************************************************************************/
 #include "aduc812.h"
 #include "int_sio.h"
 #include "fifo.h"
 #include "led.h"
-#include "mode.h"
+#include "util.h"
 
 static fifo_t rFifo;
 static fifo_t wFifo;
 
-void SIO_ISR( void ) __interrupt ( 4 ) {
+void SIO_ISR( void ) __interrupt ( 4 ) {	
 	if(TI) {
 		TI = 0;
 		if (!isEmpty(&wFifo)) {
@@ -48,23 +20,6 @@ void SIO_ISR( void ) __interrupt ( 4 ) {
 		RI = 0;
     }
 }
-
-void SetVector(unsigned char __xdata * Address, void * Vector)
-{
-	unsigned char __xdata * TmpVector; // Временная переменная//
-
-	// Первым байтом по указанному адресу записывается 
-	// код команды передачи управления ljmp, равный 02h
-	*Address = 0x02;
-	// Далее записывается адрес перехода Vector
-	TmpVector = (unsigned char __xdata *) (Address + 1);
-	*TmpVector = (unsigned char) ((unsigned short)Vector >> 8);
-	++TmpVector;
-	*TmpVector = (unsigned char) Vector;
-	// Таким образом, по адресу Address теперь
-	// располагается инструкция ljmp Vector
-}
-
 
 /**----------------------------------------------------------------------------
                         init_sio()
@@ -105,7 +60,7 @@ void init_sio( unsigned char speed )
 ----------------------------------------------------------------------------- */
 unsigned char rsiostat(void)  
 {
-	if (g_mode == MODE_CHAR) {
+	if (0/*g_mode == MODE_CHAR*/) {
 		return RI;
 	}
 	else {
@@ -126,7 +81,7 @@ unsigned char rsiostat(void)
 ----------------------------------------------------------------------------- */
 void wsio( unsigned char c )
 {	
-	if (g_mode == MODE_CHAR) {
+	if (0) { //g_mode == MODE_CHAR) {
 		SBUF = c;
 		TI   = 0;
 		while( !TI );
@@ -158,7 +113,7 @@ void wsio( unsigned char c )
 ----------------------------------------------------------------------------- */
 unsigned char rsio(void)
 {	
-	if (g_mode == MODE_CHAR) {
+	if (0){//g_mode == MODE_CHAR) {
 		while( !RI );
 		RI = 0;
 		return SBUF;
@@ -194,7 +149,7 @@ unsigned char rsio(void)
 ----------------------------------------------------------------------------- */
 void type(char * str)
 {
-	if (g_mode == MODE_CHAR) {	
+	if (0) {//g_mode == MODE_CHAR) {	
 		while( *str ) wsio( *str++ );
 	}
 	else {

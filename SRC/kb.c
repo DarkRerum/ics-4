@@ -23,7 +23,8 @@ typedef KEYSTATE_T;
 unsigned char key_states[KEYS_COUNT];
 unsigned char key_counts[KEYS_COUNT];
 
-
+unsigned char const KEY_PRESSED_COUNT = 400;
+unsigned char const KEY_RELEASED_COUNT = 30;
 /*----------------------------------------------------------------------------
                     Функции
  -----------------------------------------------------------------------------*/
@@ -73,7 +74,7 @@ void KBTimerHandler(void) __interrupt ( 5 ) {
 }
 #endif
  ////////////////OLD
-#if 0 
+
 void KBTimerHandler(void) __interrupt ( 5 ) {
 	static char colnum = 0;	
 	unsigned char row,col,rownum;
@@ -81,7 +82,6 @@ void KBTimerHandler(void) __interrupt ( 5 ) {
 	unsigned char kc = 0; //key pressed count
 	//static unsigned char c= 0;	
 	//buzz();
-	char *ch = buffer;
 	
 	//leds(colnum);
 	EA = 0;
@@ -94,42 +94,33 @@ void KBTimerHandler(void) __interrupt ( 5 ) {
 	//наличие нуля (факт замыкания контакта клавишей)
 	for(rownum = 0; rownum < 4; rownum++)
 	{
+		
+		unsigned char cur_key_id = (colnum<<2) + rownum;
 		row = read_max(KB) & (0x10 << rownum);
 		if( !row ) //Обнаружено нажатие клавиши:
-		{       			
-			for(i = 0; i<10000; i++)continue;//проверка на дребезг контакта:
-				   //через примерно 40мс повтор сканирования той же клавиши
-
+		{       												
 			row = read_max(KB) & (0x10 << rownum);
-			if( !row )
-			{				
-				//buzz();					
-				if (kc <= 1) {
-					*ch = (KBTable[(colnum<<2) + rownum]);
-					ch++;
-					kc++;
-				}
-				
-				
-				//wsio(*ch);
-				kc++;
-				ch++;
+			key_counts[cur_key_id]++;			
+						
+			if (key_counts[cur_key_id] > KEY_PRESSED_COUNT) {
+				key_states[cur_key_id] = KEY_1ST_PRESS;
+				pushElement(&keyQueue, KBTable[cur_key_id]);
 			}
 
+		}
+		else {
+			key_counts[cur_key_id]--;
+			
+			if (key_counts[cur_key_id] < KEY_RELEASED_COUNT) {
+				
+			}
 		}
 	}
 	
 	colnum++;
-	if (colnum >= 4) {
-		if (kc == 1 || kc == 2) {
-			pushElement(&keyQueue, buffer[0]);
-			if (kc == 2) {
-				pushElement(&keyQueue, buffer[1]);
-			}
-		}		
+	if (colnum >= 4) {	
 		kc = 0;
-		colnum = 0;
-		
+		colnum = 0;		
 	}
 	TH2 = 0x80;     // Timer 2 high byte
     TL2 = 0xC2;     // Timer 2 low byte

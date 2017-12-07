@@ -8,7 +8,7 @@
 
 char speaker_on = 0;
 short play_time = 0;
-short play_length = 2000;
+short play_length = 500;
 
 void T0_ISR( void ) __interrupt ( 1 ){
 	if( speaker_on ){

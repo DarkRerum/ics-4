@@ -25,8 +25,8 @@ unsigned short __xdata key_states[KEYS_COUNT];
 unsigned short __xdata key_counts[KEYS_COUNT];
 unsigned long __xdata key_timestamps[KEYS_COUNT];
 
-unsigned short const KEY_PRESSED_COUNT = 4;
-unsigned short const KEY_RELEASED_COUNT = 3;
+unsigned short const KEY_PRESSED_COUNT = 9;
+unsigned short const KEY_RELEASED_COUNT = 6;
 /*----------------------------------------------------------------------------
                     Функции
  -----------------------------------------------------------------------------*/
@@ -81,7 +81,7 @@ void KBTimerHandler(void) {//__interrupt ( 5 ) {
 	static char colnum = 0;	
 	unsigned char row,col,rownum;
 	unsigned int i;
-	char kc = 0; //key pressed count
+	static char kc = 0; //key pressed count
 	//static unsigned char c= 0;	
 	//buzz();
 	
@@ -97,12 +97,11 @@ void KBTimerHandler(void) {//__interrupt ( 5 ) {
 	for(rownum = 0; rownum < 4; rownum++)
 	{
 		unsigned char cur_key_id = (colnum<<2) + rownum;
-		//leds(key_counts[0]);
-		leds(kc);
+		//leds(key_counts[0]);		
 		row = read_max(KB) & (0x10 << rownum);
 		if( !row ) //Обнаружено нажатие клавиши:
 		{
-			if (key_counts[cur_key_id] < KEY_PRESSED_COUNT*2) {
+			if (key_counts[cur_key_id] < KEY_PRESSED_COUNT*3/2) {
 				key_counts[cur_key_id]++;
 			}
 		}
@@ -111,24 +110,27 @@ void KBTimerHandler(void) {//__interrupt ( 5 ) {
 				key_counts[cur_key_id]--;
 		}
 						
-		if (key_counts[cur_key_id] > KEY_PRESSED_COUNT) {
-			switch(key_states[cur_key_id]) {
-				unsigned long ts;
-				kc++;
-				if (kc <= 2) {
+		if (key_counts[cur_key_id] >= KEY_PRESSED_COUNT) {			
+			unsigned long ts;
+			//kc++;
+			if (kc < 3) {
+				switch(key_states[cur_key_id]) {
 					case KEY_RELEASED:
-						if (kc <= 2) {
+						if (kc < 2) {
 							ts = GetMsCounter();
 							key_states[cur_key_id] = KEY_1ST_PRESS;
 							pushElement(&keyQueue, KBTable[cur_key_id]);
 							key_timestamps[cur_key_id] = GetMsCounter();
-							//kc++;
+							kc++;
+						}
+						else {
+							leds(0xFF);
 						}
 					break;
 					case KEY_1ST_PRESS:
 						if (kc <=2) {
-							ts = GetMsCounter();
-							if ((ts - key_timestamps[cur_key_id]) > 500) {
+							ts = GetMsCounter();							
+							if ((ts - key_timestamps[cur_key_id]) > 500) {								
 								key_states[cur_key_id] = KEY_REPEATED_PRESS;
 								pushElement(&keyQueue, KBTable[cur_key_id]);
 								//kc++;
@@ -148,9 +150,7 @@ void KBTimerHandler(void) {//__interrupt ( 5 ) {
 					break;
 				}
 			}
-		} else {
-			
-
+		} else if (key_counts[cur_key_id] < KEY_RELEASED_COUNT) {			
 			switch(key_states[cur_key_id]) {
 				case KEY_RELEASED:
 					//key_states[cur_key_id] = KEY_1ST_PRESS;
@@ -173,7 +173,7 @@ void KBTimerHandler(void) {//__interrupt ( 5 ) {
 				}
 		}
 	}
-	
+	leds(key_counts[0] | kc << 4 | key_states[0] << 6);
 	colnum++;
 	if (colnum >= 4) {	
 		//kc = 0;

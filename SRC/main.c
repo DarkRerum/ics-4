@@ -7,6 +7,7 @@
 #include "speaker.h"
 #include "buzz.h"
 #include "kb.h"
+#include "sys_timer.h"
 
 void main( void )
 {

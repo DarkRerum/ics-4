@@ -20,6 +20,7 @@ SRC/main.rel
 SRC/dip.rel
 SRC/util.rel
 SRC/fifo.rel
+SRC/sys_timer.rel
 SRC/speaker.rel
 SRC/kb.rel
 SRC/int_sio.rel

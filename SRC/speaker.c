@@ -7,6 +7,8 @@
 //Спикер использует Timer0, который играет с частотой 4кгц
 
 char speaker_on = 0;
+short play_time = 0;
+short play_length = 2000;
 
 void T0_ISR( void ) __interrupt ( 1 ){
 	if( speaker_on ){
@@ -19,6 +21,12 @@ void T0_ISR( void ) __interrupt ( 1 ){
 	}
 	
 	speaker_on=!speaker_on;
+	
+	play_time += 1;	
+	
+	if (play_time >= play_length) {
+		disable_speaker();
+	}
 }
 
 void initialize_speaker(){
@@ -27,8 +35,16 @@ void initialize_speaker(){
 	ET0=1;       //включаем прерывание от таймера 0
 	TH0=-250;
 }
-	
+
+void buzz(){
+	play_time = 0;
+	speaker_on=0;
+	TL0=-250;
+	TR0=1;      //разрешаем счет таймера 0
+}
+
 void enable_speaker(){
+	play_time = 0;
 	speaker_on=0;
 	TL0=-250;
 	TR0=1;      //разрешаем счет таймера 0

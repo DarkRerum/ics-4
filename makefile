@@ -67,6 +67,7 @@ $(SRC_DIR)/main.c \
 $(SRC_DIR)/dip.c \
 $(SRC_DIR)/util.c \
 $(SRC_DIR)/fifo.c \
+$(SRC_DIR)/sys_timer.c \
 $(SRC_DIR)/speaker.c \
 $(SRC_DIR)/kb.c \
 $(SRC_DIR)/int_sio.c

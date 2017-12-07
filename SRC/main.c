@@ -10,13 +10,15 @@
 
 void main( void )
 {
+	InitTimer();
 	initialize_speaker();
 	init_sio(S9600);	
-	InitKB(0, 0);
+	//InitKB(0, 0);
 	//enable_speaker();
 	type("Hello from int_sio\n");
 	
 	EA = 1;
+	enable_speaker();
 	while (1) {
 		unsigned char k;
 		k = GetKey();	
@@ -24,7 +26,8 @@ void main( void )
 			enable_speaker();
 			wsio(k);
 			disable_speaker();
-		}		
+		}
+		//leds(GetMsCounter());
 		//leds(TL0);		
 	}
 }    

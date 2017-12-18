@@ -25,8 +25,8 @@ unsigned short __xdata key_states[KEYS_COUNT];
 unsigned short __xdata key_counts[KEYS_COUNT];
 unsigned long __xdata key_timestamps[KEYS_COUNT];
 
-unsigned short const KEY_PRESSED_COUNT = 9;
-unsigned short const KEY_RELEASED_COUNT = 6;
+unsigned short const KEY_PRESSED_COUNT = 4;
+unsigned short const KEY_RELEASED_COUNT = 2;
 /*----------------------------------------------------------------------------
                     �㭪樨
  -----------------------------------------------------------------------------*/
@@ -130,7 +130,7 @@ void KBTimerHandler(void) {//__interrupt ( 5 ) {
 					case KEY_1ST_PRESS:
 						if (kc <=2) {
 							ts = GetMsCounter();							
-							if ((ts - key_timestamps[cur_key_id]) > 500) {								
+							if ((ts - key_timestamps[cur_key_id]) > 1000) {								
 								key_states[cur_key_id] = KEY_REPEATED_PRESS;
 								pushElement(&keyQueue, KBTable[cur_key_id]);
 								//kc++;
@@ -141,7 +141,7 @@ void KBTimerHandler(void) {//__interrupt ( 5 ) {
 					case KEY_REPEATED_PRESS:
 						if (kc <= 2) {
 							ts = GetMsCounter();
-							if ((ts - key_timestamps[cur_key_id]) > 50) {						
+							if ((ts - key_timestamps[cur_key_id]) > 200) {						
 								pushElement(&keyQueue, KBTable[cur_key_id]);
 								key_timestamps[cur_key_id] = ts;				
 							}
@@ -179,7 +179,7 @@ void KBTimerHandler(void) {//__interrupt ( 5 ) {
 		//kc = 0;
 		colnum = 0;		
 	}
-	TH2 = 0x80;     // Timer 2 high byte
+	TH2 = 0xA0;     // Timer 2 high byte
     TL2 = 0xC2;     // Timer 2 low byte
 	EA = 1;	
 }

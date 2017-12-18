@@ -62,12 +62,14 @@ void read() {
 		wsio(k[i]);
 		
 		if (k[i] == '*') {
+			leds(0xFF);
 			type("\nerror *\n");
 			return;
 		}
 		if (k[i] == '#') {
 			k[i] = 0;
 			if(i == 0) {
+				leds(0xFF);
 				type("\nERR empty number\n");
 				return;
 			}						
@@ -77,6 +79,7 @@ void read() {
 			return;
 		}
 		else if (i == 2) {
+			leds(0xFF);
 			type("\nERR long number\n");
 			return;
 		}
@@ -88,7 +91,7 @@ void main( void )
 	char mode = 0;
 	InitTimer();
 	initialize_speaker();
-	init_sio(S2400);	
+	init_sio(S9600);	
 	InitKB(1000, 200);
 	//enable_speaker();
 	//type("Hello from int_sio\n");
@@ -97,7 +100,7 @@ void main( void )
 	//enable_speaker();	
 	while (1) {
 		mode = getDips();
-		//leds(mode);				
+		leds(0);				
 		if (mode) {
 			wsio('\n');
 			read();

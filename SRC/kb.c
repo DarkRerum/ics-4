@@ -115,20 +115,17 @@ void KBTimerHandler(void) {//__interrupt ( 5 ) {
 		if (key_counts[cur_key_id] >= KEY_PRESSED_COUNT) {			
 			unsigned long ts;
 			//kc++;
-			if (kc < 3) {
+			if (kc < 9) {
 				switch(key_states[cur_key_id]) {
-					case KEY_RELEASED:
-						if (kc < 2) {
+					case KEY_RELEASED:						
 							ts = GetMsCounter();
 							key_states[cur_key_id] = KEY_1ST_PRESS;
-							pushElement(&keyQueue, KBTable[cur_key_id]);
-							buzz();
-							key_timestamps[cur_key_id] = GetMsCounter();
 							kc++;
-						}
-						else {
-							//leds(0xFF);
-						}
+							if (kc < 3) {
+								pushElement(&keyQueue, KBTable[cur_key_id]);
+								buzz();
+							}							
+							key_timestamps[cur_key_id] = GetMsCounter();												
 					break;
 					case KEY_1ST_PRESS:
 						if (kc <=2) {

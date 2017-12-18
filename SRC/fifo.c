@@ -30,6 +30,6 @@ void pushElement( fifo_t* pFifo, unsigned char element ) {
 }
 
 int isEmpty( fifo_t* pFifo ) {
-	leds(pFifo->size);
+	//leds(pFifo->size);
     return pFifo->size == 0;
 }

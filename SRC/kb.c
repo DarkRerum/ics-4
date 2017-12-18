@@ -16,7 +16,6 @@
 char KBTable[]="147*2580369#ABCD"; //Таблица символов, соответствующих клавишам
                                    //клавиатуры SDK-1.1
 static fifo_t keyQueue;
-char buffer [2];
 
 static enum { KEY_RELEASED, KEY_1ST_PRESS, KEY_REPEATED_PRESS }
 typedef KEYSTATE_T;
@@ -24,6 +23,9 @@ typedef KEYSTATE_T;
 unsigned short __xdata key_states[KEYS_COUNT];
 unsigned short __xdata key_counts[KEYS_COUNT];
 unsigned long __xdata key_timestamps[KEYS_COUNT];
+
+unsigned int first_repeat_delay;
+unsigned int repeat_delay;
 
 unsigned short const KEY_PRESSED_COUNT = 4;
 unsigned short const KEY_RELEASED_COUNT = 2;
@@ -120,20 +122,21 @@ void KBTimerHandler(void) {//__interrupt ( 5 ) {
 							ts = GetMsCounter();
 							key_states[cur_key_id] = KEY_1ST_PRESS;
 							pushElement(&keyQueue, KBTable[cur_key_id]);
+							buzz();
 							key_timestamps[cur_key_id] = GetMsCounter();
 							kc++;
 						}
 						else {
-							leds(0xFF);
+							//leds(0xFF);
 						}
 					break;
 					case KEY_1ST_PRESS:
 						if (kc <=2) {
 							ts = GetMsCounter();							
-							if ((ts - key_timestamps[cur_key_id]) > 1000) {								
+							if ((ts - key_timestamps[cur_key_id]) > first_repeat_delay) {								
 								key_states[cur_key_id] = KEY_REPEATED_PRESS;
 								pushElement(&keyQueue, KBTable[cur_key_id]);
-								//kc++;
+								buzz();
 								key_timestamps[cur_key_id] = ts;
 							}
 						}
@@ -141,8 +144,9 @@ void KBTimerHandler(void) {//__interrupt ( 5 ) {
 					case KEY_REPEATED_PRESS:
 						if (kc <= 2) {
 							ts = GetMsCounter();
-							if ((ts - key_timestamps[cur_key_id]) > 200) {						
+							if ((ts - key_timestamps[cur_key_id]) > repeat_delay) {						
 								pushElement(&keyQueue, KBTable[cur_key_id]);
+								buzz();
 								key_timestamps[cur_key_id] = ts;				
 							}
 							//kc++;
@@ -173,7 +177,7 @@ void KBTimerHandler(void) {//__interrupt ( 5 ) {
 				}
 		}
 	}
-	leds(key_counts[0] | kc << 4 | key_states[0] << 6);
+	//leds(key_counts[0] | kc << 4 | key_states[0] << 6);
 	colnum++;
 	if (colnum >= 4) {	
 		//kc = 0;
@@ -250,8 +254,10 @@ char GetKey() {
 	return 0;
 }
 
-void InitKB(unsigned int first_repeat_delay, unsigned int repeat_speed) {			
+void InitKB(unsigned int first_repeat_d, unsigned int repeat_d) {			
 	short i;
+	first_repeat_delay = first_repeat_d;
+	repeat_delay = repeat_d;
 	initFifo(&keyQueue);
 	for (i = 0; i < KEYS_COUNT; i++) {
 		key_states[i] = KEY_RELEASED;

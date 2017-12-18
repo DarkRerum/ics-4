@@ -58,21 +58,26 @@ void read() {
 			k[i] = GetKey();
 		}
 		while (k[i] == 0);
+				
 		wsio(k[i]);
+		
+		if (k[i] == '*') {
+			type("\nerror *\n");
+			return;
+		}
 		if (k[i] == '#') {
-			if(i == 0) {
-				type("\r\nERR empty number\r\n");
-				return;
-			}			
 			k[i] = 0;
+			if(i == 0) {
+				type("\nERR empty number\n");
+				return;
+			}						
 			//wsio('\n');
 			//wsio('\r');
 			type_converted(k);
-			wsio('\n');
-			wsio('\r');			
+			return;
 		}
 		else if (i == 2) {
-			type("\r\nERR long number\r\n");
+			type("\nERR long number\n");
 			return;
 		}
 	}
@@ -83,24 +88,27 @@ void main( void )
 	char mode = 0;
 	InitTimer();
 	initialize_speaker();
-	init_sio(S9600);	
-	InitKB(0, 0);
+	init_sio(S2400);	
+	InitKB(1000, 200);
 	//enable_speaker();
-	type("Hello from int_sio\n");
+	//type("Hello from int_sio\n");
 	
 	EA = 1;
-	enable_speaker();	
+	//enable_speaker();	
 	while (1) {
+		mode = getDips();
+		//leds(mode);				
 		if (mode) {
+			wsio('\n');
 			read();
 		}
 		else {
 			unsigned char k;
 			k = GetKey();	
 			if (k) {
-				enable_speaker();
+				//enable_speaker();
 				wsio(k);		
 			}
-		}		
+		}			
 	}
 }    

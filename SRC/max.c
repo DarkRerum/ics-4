@@ -48,12 +48,15 @@ e-mail: kluchev@d1.ifmo.ru
 Пример:
 -----------------------------------------------------------------------------*/
 void write_max( unsigned char __xdata *regnum, unsigned char val )
-{
-unsigned char oldDPP = DPP;
-
+{	
+	unsigned char oldDPP = DPP;
+	unsigned char oldEA = EA;
+	
+	EA = 0;
     DPP     = MAXBASE;
     *regnum = val;
     DPP     = oldDPP;
+	EA = oldEA;
 }
 
 /**----------------------------------------------------------------------------
@@ -73,11 +76,13 @@ unsigned char read_max( unsigned char __xdata *regnum )
 {
 unsigned char oldDPP=DPP;
 unsigned char val;
+unsigned char oldEA = EA;
 
+	EA = 0;
     DPP = MAXBASE;
     val = *regnum;
     DPP = oldDPP;
-
+	EA = oldEA;
     return val;
 }
 
